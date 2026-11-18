@@ -113,8 +113,8 @@ erDiagram
    - `initial_bid_close_time`: Initial planned auction closing time.
    - `current_bid_close_time`: Dynamically extended closing time.
    - `forced_bid_close_time`: Hard ceiling; bidding stops regardless of activity.
-   - `trigger_window_minutes` ($X$): Time window before close monitored for triggers.
-   - `extension_duration_minutes` ($Y$): Extension added when triggered.
+   - `trigger_window_minutes` (X): Time window before close monitored for triggers.
+   - `extension_duration_minutes` (Y): Extension added when triggered.
    - `extension_trigger_type`: Extension mode (`ANY_BID`, `ANY_RANK_CHANGE`, or `L1_RANK_CHANGE`).
 
 2. **`bids`**: Stores submitted quotes.
@@ -142,26 +142,27 @@ erDiagram
 
 ### Core Rules
 
-1. **Trigger Window ($X$ Minutes)**:
-   $$\text{Trigger Window} = [\text{current\_close} - X, \ \text{current\_close}]$$
-   Only bids arriving inside this window can trigger an extension.
+1. **Trigger Window (X Minutes)**:
+   - **Formula**: `Trigger Window = [Current Close - X minutes, Current Close]`
+   - Only bids arriving inside this window can trigger an extension.
 
-2. **Extension Duration ($Y$ Minutes)**:
-   When triggered, tentative new close time is:
-   $$\text{tentative\_close} = \text{current\_close} + Y$$
+2. **Extension Duration (Y Minutes)**:
+   - When triggered, tentative new close time is:
+     `Tentative Close Time = Current Close Time + Y minutes`
 
 3. **Forced Close Time Rule (Hard Ceiling)**:
-   **The auction must never extend beyond the Forced Bid Close Time.**
-   $$\text{new\_close} = \min(\text{tentative\_close}, \ \text{forced\_bid\_close\_time})$$
-   If $\text{current\_close} == \text{forced\_bid\_close\_time}$, no further extensions can occur.
+   - **Rule**: The auction must never extend beyond the Forced Bid Close Time.
+   - **Formula**:
+     `New Close Time = min(Tentative Close Time, Forced Bid Close Time)`
+   - If `Current Close Time == Forced Bid Close Time`, no further extensions can occur.
 
 4. **Extension Trigger Conditions**:
    - `ANY_BID`: Any new bid submitted inside the trigger window extends the auction.
    - `ANY_RANK_CHANGE`: Any shift in supplier leaderboard ranking extends the auction.
-   - `L1_RANK_CHANGE`: Extends *only* when the lowest-priced supplier ($L1$) changes.
+   - `L1_RANK_CHANGE`: Extends *only* when the lowest-priced supplier (L1) changes.
 
 5. **Supplier Ranking**:
-   Suppliers are ranked $L1, L2, L3, \dots$ based on their lowest submitted total price in ascending order.
+   Suppliers are ranked L1, L2, L3, ... based on their lowest submitted total price in ascending order.
 
 ---
 
